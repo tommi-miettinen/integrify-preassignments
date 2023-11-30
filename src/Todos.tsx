@@ -1,32 +1,28 @@
 import { useState } from "react";
 import Modal from "./Modal";
+import { Todos } from "./types";
+import { PencilIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
-interface Todo {
-  content: string;
-  id: number;
-  status: string;
-  deadline: string;
-}
-const options = ["started", "not started", "done"];
-
-const optionColors: Record<string, string> = {
-  started: "yellow",
-  done: "green",
-  "not started": "red",
+const StatusIndicator = ({ option }: { option: string }) => {
+  if (option === "done") return <span className="w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full" />;
+  if (option === "not started") return <span className="w-3.5 h-3.5 bg-red-500 border-2 border-white dark:border-gray-800 rounded-full" />;
+  if (option === "started") return <span className="w-3.5 h-3.5 bg-yellow-500 border-2 border-white dark:border-gray-800 rounded-full" />;
 };
+
+const options = ["started", "not started", "done"];
 
 const Todos = () => {
   const [open, setOpen] = useState(false);
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todos>([]);
   const [input, setInput] = useState("");
   const [deadline, setDeadline] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState<string>("not started");
 
   const addTodo = () => {
     setTodos((t) => [...t, { content: input, id: Math.random(), status, deadline }]);
     setInput("");
     setDeadline("");
-    setStatus("");
+    setStatus("not started");
     setOpen(false);
   };
 
@@ -34,12 +30,20 @@ const Todos = () => {
 
   return (
     <div className="h-full w-full flex flex-col items-center justify-center pt-16">
-      <div className="bg-base-300 p-4 rounded-lg w-[500px]">
+      <div className="bg-base-200 p-4 rounded-lg w-[500px]">
         <div className="flex flex-col gap-2">
           {todos.map((todo) => (
-            <div onClick={() => deleteTodo(todo.id)} className="flex items-center gap-2 bg-base-200 p-4 rounded-xl" key={todo.id}>
-              <span className="w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></span>
+            <div className="flex items-center gap-2 bg-base-200 p-4 rounded-xl" key={todo.id}>
+              <StatusIndicator option={todo.status} />
               <span>{todo.content}</span>
+              <div className="ml-auto flex gap-2">
+                <button>
+                  <PencilIcon className="h-5 w-5" />
+                </button>
+                <button onClick={() => deleteTodo(todo.id)}>
+                  <XMarkIcon className="h-6 w-6" />
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -49,7 +53,7 @@ const Todos = () => {
       </div>
 
       <Modal visible={open} onClose={() => setOpen(false)}>
-        <div className="bg-base-200 rounded-2xl p-8">
+        <div className="w-[500px] bg-base-200 rounded-2xl p-8">
           <input
             type="text"
             placeholder="Content"
@@ -64,9 +68,9 @@ const Todos = () => {
             value={deadline}
             onChange={(e) => setDeadline(e.target.value)}
           />
-          <select className="select select-bordered w-full mb-4" value={status} onChange={(e) => setStatus(e.target.value)}>
+          <select className="capitalize  select select-bordered w-full mb-4" value={status} onChange={(e) => setStatus(e.target.value)}>
             {options.map((option) => (
-              <option value={option} key={option}>
+              <option className="capitalize" value={option} key={option}>
                 {option}
               </option>
             ))}

@@ -14,3 +14,12 @@ export type Input = {
 };
 
 export type Inputs = Input[];
+
+type Todo = {
+  content: string;
+  id: number;
+  status: string;
+  deadline: string;
+};
+
+export type Todos = Todo[];
