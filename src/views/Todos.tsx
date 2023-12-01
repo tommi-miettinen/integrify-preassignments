@@ -1,16 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from "../components/Modal";
 import { TodoItem, TodoItems } from "../types";
 import Todo from "../components/Todo";
 
 const options = ["not started", "started", "done"];
 
+const loadTodosFromLocalStorage = () => (localStorage.todos ? JSON.parse(localStorage.todos) : []);
+
 const Todos = () => {
   const [open, setOpen] = useState(false);
-  const [todos, setTodos] = useState<TodoItems>([]);
+  const [todos, setTodos] = useState<TodoItems>(loadTodosFromLocalStorage());
   const [input, setInput] = useState("");
   const [deadline, setDeadline] = useState("");
   const [status, setStatus] = useState<string>(options[0]);
+
+  useEffect(() => {
+    localStorage.todos = JSON.stringify(todos);
+  }, [todos]);
 
   const addTodo = () => {
     setTodos((t) => [...t, { content: input, id: Math.random(), status, deadline }]);
@@ -25,7 +31,7 @@ const Todos = () => {
   const editTodo = (todo: TodoItem) => setTodos((todos) => todos.map((t) => (t.id === todo.id ? todo : t)));
 
   return (
-    <div className="h-full w-full flex flex-col items-center justify-center">
+    <div className="h-full flex flex-col items-center justify-center">
       <div className="bg-base-200 p-4 rounded-lg w-full sm:w-[450px] h-full sm:h-[600px] flex flex-col overflow-auto">
         <div className="flex flex-col gap-2 overflow-auto h-full">
           {todos.map((todo) => (

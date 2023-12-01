@@ -30,7 +30,7 @@ const jsonString = hljs.highlight(
 
 const Express = () => {
   return (
-    <div className="bg-base-300 flex flex-col pt-16">
+    <div className="flex flex-col overflow-auto">
       <div className="p-8 flex flex-col gap-4">
         <span className="p-4">Install the required dependencies.</span>
         <div className="bg-base-200 rounded-2xl p-8">

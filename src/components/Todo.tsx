@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import { TodoItem } from "../types";
 import { PencilIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import Modal from "./Modal";
@@ -33,10 +33,13 @@ const Todo = ({
   };
 
   return (
-    <>
-      <div className="flex items-center gap-2 bg-base-200 p-4 rounded-xl" key={todo.id}>
+    <Fragment>
+      <div className="flex items-center gap-4 bg-base-200 p-4 rounded-xl" key={todo.id}>
         <StatusIndicator status={todo.status} />
-        <span className="overflow-hidden">{todo.content}</span>
+        <div className="flex flex-col">
+          <span className="overflow-hidden text-md text-white">{todo.content}</span>
+          <span className="overflow-hidden text-xs">{todo.deadline}</span>
+        </div>
         <div className="ml-auto  flex gap-2">
           <button className="tooltip tooltip-left" data-tip="Edit" onClick={() => setEditing(true)}>
             <PencilIcon className="h-5 w-5" />
@@ -87,7 +90,7 @@ const Todo = ({
           </div>
         </div>
       </Modal>
-    </>
+    </Fragment>
   );
 };
 

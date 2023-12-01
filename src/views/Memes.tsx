@@ -35,9 +35,9 @@ const Memes = () => {
 
   return (
     <Fragment>
-      <div className="w-full gap-2 flex flex-col pt-16 items-center h-full">
+      <div className="w-full h-full overflow-auto gap-2 flex flex-col items-center">
         {isLoading && <span className="w-14 h-14 loading loading-spinner text-primary m-auto" />}
-        <section className="p-8 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        <section className="p-8 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {!isLoading &&
             data?.map((meme: Meme) => {
               return (
@@ -61,9 +61,9 @@ const Memes = () => {
 
       <Modal id="generate-meme-modal" onClose={() => setSelectedMeme(null)} visible={Boolean(selectedMeme)}>
         {selectedMeme && (
-          <div className="card min-w-[500px] min-h-[600px] bg-base-300 shadow-xl overflow-auto">
-            <figure>
-              <img className="object-contain" src={generatedMeme || selectedMeme!.blank} alt={selectedMeme!.name} />
+          <div className="card w-screen sm:min-w-[500px] max-w-[500px]  max-h-screen bg-base-300 shadow-xl overflow-auto">
+            <figure className="bg-black">
+              <img className="max-h-96 object-contain" src={generatedMeme || selectedMeme!.blank} alt={selectedMeme!.name} />
             </figure>
             <div className="card-body flex flex-column">
               {inputs.map((input) => (
