@@ -15,11 +15,11 @@ export type Input = {
 
 export type Inputs = Input[];
 
-type Todo = {
+export type TodoItem = {
   content: string;
   id: number;
   status: string;
   deadline: string;
 };
 
-export type Todos = Todo[];
+export type TodoItems = TodoItem[];

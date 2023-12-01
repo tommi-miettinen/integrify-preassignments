@@ -1,38 +1,35 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 interface ModalProps {
+  id: string;
   visible: boolean;
   children?: JSX.Element | JSX.Element[] | undefined | null;
   onClose: () => void;
 }
 
-const Modal = ({ visible, children, onClose }: ModalProps) => {
+const Modal = ({ visible, children, onClose, id }: ModalProps) => {
+  const modalRef = useRef<HTMLDialogElement | null>(null);
+
   useEffect(() => {
-    const modal = document.getElementById("my_modal_2") as HTMLDialogElement;
-    modal.addEventListener("click", handleClose);
+    modalRef.current?.addEventListener("click", handleClose);
+
+    return () => {
+      modalRef.current?.removeEventListener("click", handleClose);
+    };
   }, []);
 
   useEffect(() => {
-    visible ? showModal() : hideModal();
+    visible ? modalRef.current?.showModal() : modalRef.current?.close();
   }, [visible]);
 
-  const handleClose = (e: any) => {
-    if (e.target.id !== "my_modal_2") return;
-    onClose();
-  };
-
-  const showModal = () => {
-    const modal = document.getElementById("my_modal_2") as HTMLDialogElement;
-    modal.showModal();
-  };
-
-  const hideModal = () => {
-    const modal = document.getElementById("my_modal_2") as HTMLDialogElement;
-    modal.close();
+  const handleClose = (e: Event) => {
+    if (modalRef.current && e.target === modalRef.current) {
+      onClose();
+    }
   };
 
   return (
-    <dialog id="my_modal_2" className="modal">
+    <dialog ref={modalRef} id={id} className="modal">
       <div>{children}</div>
     </dialog>
   );
