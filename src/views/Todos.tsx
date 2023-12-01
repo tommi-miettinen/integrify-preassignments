@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Modal from "../Modal";
-import { TodoItems } from "../types";
-import Todo from "../Todo";
+import Modal from "../components/Modal";
+import { TodoItem, TodoItems } from "../types";
+import Todo from "../components/Todo";
 
 const options = ["not started", "started", "done"];
 
@@ -10,24 +10,26 @@ const Todos = () => {
   const [todos, setTodos] = useState<TodoItems>([]);
   const [input, setInput] = useState("");
   const [deadline, setDeadline] = useState("");
-  const [status, setStatus] = useState<string>("not started");
+  const [status, setStatus] = useState<string>(options[0]);
 
   const addTodo = () => {
     setTodos((t) => [...t, { content: input, id: Math.random(), status, deadline }]);
     setInput("");
     setDeadline("");
-    setStatus("not started");
+    setStatus(options[0]);
     setOpen(false);
   };
 
-  const deleteTodo = (todoId: number) => setTodos((t) => t.filter((t) => t.id !== todoId));
+  const deleteTodo = (todoId: number) => setTodos((todos) => todos.filter((t) => t.id !== todoId));
+
+  const editTodo = (todo: TodoItem) => setTodos((todos) => todos.map((t) => (t.id === todo.id ? todo : t)));
 
   return (
-    <div className="h-full w-full flex flex-col items-center justify-center pt-16">
+    <div className="h-full w-full flex flex-col items-center justify-center">
       <div className="bg-base-200 p-4 rounded-lg w-full sm:w-[450px] h-full sm:h-[600px] flex flex-col overflow-auto">
         <div className="flex flex-col gap-2 overflow-auto h-full">
           {todos.map((todo) => (
-            <Todo key={todo.id} editTodo={() => {}} deleteTodo={deleteTodo} todo={todo} />
+            <Todo key={todo.id} editTodo={editTodo} deleteTodo={deleteTodo} todo={todo} />
           ))}
         </div>
         <button className="btn btn-primary mt-4 w-full" onClick={() => setOpen(true)}>

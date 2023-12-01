@@ -14,7 +14,7 @@ const App = () => {
   const [view, setView] = useState(Views.Memes);
 
   return (
-    <div className="h-screen w-full flex flex-col bg-base-300 overflow-auto">
+    <div className="min-h-screen h-screen w-full flex flex-col bg-base-300">
       <div className="navbar bg-base-100 fixed top-0 z-10 gap-2 flex items-center justify-center sm:justify-start">
         <div onClick={() => setView(Views.Express)} className="btn btn-ghost text-xl">
           Express

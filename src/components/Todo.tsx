@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TodoItem } from "./types";
+import { TodoItem } from "../types";
 import { PencilIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import Modal from "./Modal";
 
@@ -27,16 +27,21 @@ const Todo = ({
   const [deleting, setDeleting] = useState(false);
   const [editing, setEditing] = useState(false);
 
+  const handleEditTodo = () => {
+    editTodo({ ...todo, content, deadline, status });
+    setEditing(false);
+  };
+
   return (
     <>
       <div className="flex items-center gap-2 bg-base-200 p-4 rounded-xl" key={todo.id}>
         <StatusIndicator status={todo.status} />
-        <span>{todo.content}</span>
-        <div className="ml-auto flex gap-2">
-          <button onClick={() => setEditing(true)}>
+        <span className="overflow-hidden">{todo.content}</span>
+        <div className="ml-auto  flex gap-2">
+          <button className="tooltip tooltip-left" data-tip="Edit" onClick={() => setEditing(true)}>
             <PencilIcon className="h-5 w-5" />
           </button>
-          <button onClick={() => setDeleting(true)}>
+          <button className="tooltip tooltip-left" data-tip="Delete" onClick={() => setDeleting(true)}>
             <XMarkIcon className="h-6 w-6" />
           </button>
         </div>
@@ -64,7 +69,7 @@ const Todo = ({
               </option>
             ))}
           </select>
-          <button className="btn btn-primary mt-4 w-full" onClick={() => {}}>
+          <button className="btn btn-primary mt-4 w-full" onClick={handleEditTodo}>
             Save changes
           </button>
         </div>
@@ -73,7 +78,7 @@ const Todo = ({
         <div className="w-full sm:w-[500px]  bg-base-200 rounded-2xl p-8 gap-4 flex flex-col">
           <h2 className="text-xl">Delete Todo?</h2>
           <div className="mt-auto flex justify-end gap-2">
-            <button onClick={() => setDeleting(false)} className="btn btn-outline">
+            <button onClick={() => setDeleting(false)} className="btn btn-neutral">
               Cancel
             </button>
             <button onClick={() => deleteTodo(todo.id)} className="btn btn-primary">

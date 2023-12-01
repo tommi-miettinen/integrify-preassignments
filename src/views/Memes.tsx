@@ -1,13 +1,11 @@
-import { useState, useEffect } from "react";
-import { Meme, Inputs } from "../types";
-import Modal from "../Modal";
-import axios from "axios";
-import useDataFetch from "../hooks/useDataFetch";
-
-const fetchMemes = async () => axios.get("https://api.memegen.link/templates");
+import { useState, useEffect, Fragment } from "react";
+import { Meme, Memes, Inputs } from "../types";
+import Modal from "../components/Modal";
+import { useQuery } from "@tanstack/react-query";
+import memeAPI from "../api/memeAPI";
 
 const Memes = () => {
-  const { data, loading } = useDataFetch(fetchMemes);
+  const { data, isLoading } = useQuery<Memes>({ queryKey: ["memes"], queryFn: memeAPI.fetchMemes });
   const [selectedMeme, setSelectedMeme] = useState<Meme | null>(null);
   const [generatedMeme, setGeneratedMeme] = useState("");
   const [inputs, setInputs] = useState<Inputs>([]);
@@ -19,10 +17,6 @@ const Memes = () => {
     }
     createTextInputs();
   }, [selectedMeme]);
-
-  useEffect(() => {
-    fetchMemes();
-  }, []);
 
   const createTextInputs = () => {
     if (!selectedMeme) return;
@@ -39,32 +33,32 @@ const Memes = () => {
     setGeneratedMeme(generatedMeme);
   };
 
-  console.log(data);
-
   return (
-    <div className="h-full w-full overflow-auto">
-      <div className="w-full h-full gap-2 flex flex-column justify-center items-center pt-16">
-        {loading && <span className="loading loading-spinner loading-lg text-primary" />}
-        <section className="p-8 grid grid-cols-3 gap-8">
-          {data?.map((meme: Meme) => {
-            return (
-              <div key={meme.id} className="card w-96 h-96 bg-base-100 shadow-xl grid grid-rows-3">
-                <figure className="row-span-2">
-                  <img className="w-full scale-125" src={meme.blank} alt={meme.name} loading="lazy" />
-                </figure>
-                <div className="h-full  flex flex-col p-3">
-                  <h2 className="card-title">{meme.name}</h2>
-                  <div className="card-actions mt-auto">
-                    <button onClick={() => setSelectedMeme(meme)} className="btn btn-primary w-full mt-auto">
-                      Generate
-                    </button>
+    <Fragment>
+      <div className="w-full gap-2 flex flex-col pt-16 items-center h-full">
+        {isLoading && <span className="w-14 h-14 loading loading-spinner text-primary m-auto" />}
+        <section className="p-8 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+          {!isLoading &&
+            data?.map((meme: Meme) => {
+              return (
+                <div key={meme.id} className="card w-full max-h-96 sm:w-80 sm:h-80 bg-base-100 shadow-xl grid grid-rows-3">
+                  <figure className="row-span-2">
+                    <img className="w-full scale-125" src={meme.blank} alt={meme.name} loading="lazy" />
+                  </figure>
+                  <div className="h-full  flex flex-col p-3">
+                    <h2 className="card-title">{meme.name}</h2>
+                    <div className="card-actions mt-auto">
+                      <button onClick={() => setSelectedMeme(meme)} className="btn btn-primary w-full mt-auto">
+                        Generate
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </section>
       </div>
+
       <Modal id="generate-meme-modal" onClose={() => setSelectedMeme(null)} visible={Boolean(selectedMeme)}>
         {selectedMeme && (
           <div className="card min-w-[500px] min-h-[600px] bg-base-300 shadow-xl overflow-auto">
@@ -88,7 +82,7 @@ const Memes = () => {
           </div>
         )}
       </Modal>
-    </div>
+    </Fragment>
   );
 };
 
