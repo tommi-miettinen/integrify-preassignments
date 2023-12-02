@@ -1,31 +1,18 @@
 import { useState, Fragment } from "react";
-import { TodoItem } from "../types";
+import { Options, TodoProps } from "../types";
 import { PencilIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import Modal from "./Modal";
+import StatusIndicator from "./StatusIndicator";
+import { options } from "../types";
 
-const StatusIndicator = ({ status }: { status: string }) => {
-  if (status === "done") return <span className="w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full" />;
-  if (status === "not started") return <span className="w-3.5 h-3.5 bg-red-500 border-2 border-white dark:border-gray-800 rounded-full" />;
-  if (status === "started") return <span className="w-3.5 h-3.5 bg-yellow-500 border-2 border-white dark:border-gray-800 rounded-full" />;
-};
-
-const options = ["not started", "started", "done"];
-
-const Todo = ({
-  todo,
-  deleteTodo,
-  editTodo,
-}: {
-  todo: TodoItem;
-  deleteTodo: (todoId: number) => void;
-  editTodo: (todo: TodoItem) => void;
-}) => {
+const Todo = ({ todo, deleteTodo, editTodo }: TodoProps) => {
   const [content, setContent] = useState(todo.content);
   const [deadline, setDeadline] = useState(todo.deadline);
   const [status, setStatus] = useState(todo.status);
-
   const [deleting, setDeleting] = useState(false);
   const [editing, setEditing] = useState(false);
+
+  const inputsFilled = content && deadline && status;
 
   const handleEditTodo = () => {
     editTodo({ ...todo, content, deadline, status });
@@ -50,29 +37,43 @@ const Todo = ({
         </div>
       </div>
       <Modal id={"edit-modal" + todo.id.toString()} visible={editing} onClose={() => setEditing(false)}>
-        <div className="sm:w-[500px] bg-base-200 rounded-2xl p-8">
-          <input
-            type="text"
-            placeholder="Content"
-            className="input input-bordered w-full mb-4"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Deadline"
-            className="input input-bordered w-full mb-4"
-            value={deadline}
-            onChange={(e) => setDeadline(e.target.value)}
-          />
-          <select className="capitalize  select select-bordered w-full mb-4" value={status} onChange={(e) => setStatus(e.target.value)}>
-            {options.map((option) => (
-              <option className="capitalize" value={option} key={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-          <button className="btn btn-primary mt-4 w-full" onClick={handleEditTodo}>
+        <div className="sm:w-[500px] bg-base-200 rounded-2xl p-8 flex flex-col gap-2">
+          <div className="flex flex-col gap-1">
+            <label htmlFor={"edit-content" + todo.id.toString()}>Content</label>
+            <input
+              id={"edit-content" + todo.id.toString()}
+              type="text"
+              className="input input-bordered w-full"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label htmlFor={"edit-deadline" + todo.id.toString()}>Deadline</label>
+            <input
+              id={"edit-deadline" + todo.id.toString()}
+              type="text"
+              className="input input-bordered w-full"
+              value={deadline}
+              onChange={(e) => setDeadline(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label htmlFor={"edit-status" + todo.id.toString()}>Status</label>
+            <select
+              id={"edit-status" + todo.id.toString()}
+              className="capitalize select select-bordered w-[180px] mb-4"
+              value={status}
+              onChange={(e) => setStatus(e.target.value as Options)}
+            >
+              {options.map((option) => (
+                <option className="capitalize" value={option} key={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
+          <button disabled={!inputsFilled} className="btn btn-primary w-full" onClick={handleEditTodo}>
             Save changes
           </button>
         </div>

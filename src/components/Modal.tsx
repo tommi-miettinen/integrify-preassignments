@@ -11,16 +11,22 @@ const Modal = ({ visible, children, onClose, id }: ModalProps) => {
   const modalRef = useRef<HTMLDialogElement | null>(null);
 
   useEffect(() => {
+    visible ? modalRef.current?.showModal() : modalRef.current?.close();
+
     modalRef.current?.addEventListener("click", handleClose);
+    modalRef.current?.addEventListener("keydown", handleKeyDown);
 
     return () => {
       modalRef.current?.removeEventListener("click", handleClose);
+      modalRef.current?.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
-
-  useEffect(() => {
-    visible ? modalRef.current?.showModal() : modalRef.current?.close();
   }, [visible]);
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Escape") {
+      onClose();
+    }
+  };
 
   const handleClose = (e: Event) => {
     if (modalRef.current && e.target === modalRef.current) {
