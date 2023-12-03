@@ -21,3 +21,12 @@ https://d2mrlgo9apcvel.cloudfront.net/
 ![kuva](https://github.com/tommi-miettinen/integrify-preassignments/assets/63008431/9cf7171b-0b29-4aee-a4da-235c62c90cf7)
 
 ![kuva](https://github.com/tommi-miettinen/integrify-preassignments/assets/63008431/cfbd2aef-6eab-4fb5-9ffa-ea8b54fe5880)
+
+## Running locally
+
+```
+git clone https://github.com/tommi-miettinen/integrify-preassignments.git
+cd integrify-preassignments
+npm install
+npm run dev
+```
