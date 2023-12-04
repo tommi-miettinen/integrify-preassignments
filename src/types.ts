@@ -18,13 +18,13 @@ export type Inputs = Input[];
 export type TodoItem = {
   content: string;
   id: string;
-  status: Options;
+  status: TodoStatusOptions;
   deadline: string;
 };
 
 export type TodoItems = TodoItem[];
 
-export enum Options {
+export enum TodoStatusOptions {
   NotStarted = "not started",
   Started = "started",
   Done = "done",
@@ -42,4 +42,4 @@ export interface TodoProps {
   editTodo: (todo: TodoItem) => void;
 }
 
-export const options = [Options.NotStarted, Options.Started, Options.Done];
+export const todoStatusOptions = [TodoStatusOptions.NotStarted, TodoStatusOptions.Started, TodoStatusOptions.Done];

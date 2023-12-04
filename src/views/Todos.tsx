@@ -1,9 +1,9 @@
 import { useState, useEffect, Fragment } from "react";
 import Modal from "../components/Modal";
-import { TodoItem, TodoItems, Options } from "../types";
+import { TodoItem, TodoItems, TodoStatusOptions } from "../types";
 import Todo from "../components/Todo";
 import { v4 as uuid } from "uuid";
-import { options } from "../types";
+import { todoStatusOptions } from "../types";
 
 const loadTodosFromLocalStorage = () => (localStorage.todos ? JSON.parse(localStorage.todos) : []);
 
@@ -12,7 +12,7 @@ const Todos = () => {
   const [todos, setTodos] = useState<TodoItems>(loadTodosFromLocalStorage());
   const [content, setContent] = useState("");
   const [deadline, setDeadline] = useState("");
-  const [status, setStatus] = useState<Options>(options[0]);
+  const [status, setStatus] = useState<TodoStatusOptions>(todoStatusOptions[0]);
 
   const inputsFilled = content && deadline && status;
 
@@ -24,7 +24,7 @@ const Todos = () => {
     setTodos((t) => [...t, { content, id: uuid(), status, deadline }]);
     setContent("");
     setDeadline("");
-    setStatus(options[0]);
+    setStatus(todoStatusOptions[0]);
     setAddingTodo(false);
   };
 
@@ -73,9 +73,9 @@ const Todos = () => {
               id="status"
               className="capitalize select select-bordered w-full mb-4"
               value={status}
-              onChange={(e) => setStatus(e.target.value as Options)}
+              onChange={(e) => setStatus(e.target.value as TodoStatusOptions)}
             >
-              {options.map((option) => (
+              {todoStatusOptions.map((option) => (
                 <option className="capitalize" value={option} key={option}>
                   {option}
                 </option>

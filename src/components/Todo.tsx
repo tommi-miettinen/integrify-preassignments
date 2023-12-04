@@ -1,9 +1,9 @@
 import { useState, Fragment } from "react";
-import { Options, TodoProps } from "../types";
+import { TodoStatusOptions, TodoProps } from "../types";
 import { PencilIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import Modal from "./Modal";
 import StatusIndicator from "./StatusIndicator";
-import { options } from "../types";
+import { todoStatusOptions } from "../types";
 
 const Todo = ({ todo, deleteTodo, editTodo }: TodoProps) => {
   const [content, setContent] = useState(todo.content);
@@ -64,9 +64,9 @@ const Todo = ({ todo, deleteTodo, editTodo }: TodoProps) => {
               id={"edit-status" + todo.id.toString()}
               className="capitalize select select-bordered w-[180px] mb-4"
               value={status}
-              onChange={(e) => setStatus(e.target.value as Options)}
+              onChange={(e) => setStatus(e.target.value as TodoStatusOptions)}
             >
-              {options.map((option) => (
+              {todoStatusOptions.map((option) => (
                 <option className="capitalize" value={option} key={option}>
                   {option}
                 </option>

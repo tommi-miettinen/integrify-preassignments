@@ -1,7 +1,7 @@
-import { Options } from "../types";
+import { TodoStatusOptions } from "../types";
 
 interface StatusIndicatorOption {
-  status: Options;
+  status: TodoStatusOptions;
 }
 
 const StatusIndicator = ({ status }: StatusIndicatorOption) => {

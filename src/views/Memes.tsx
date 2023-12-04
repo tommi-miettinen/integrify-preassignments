@@ -51,8 +51,9 @@ const Memes = () => {
   return (
     <Fragment>
       <div className="w-full h-full overflow-auto gap-2 flex flex-col items-center">
-        {isLoading && <span className="w-14 h-14 loading loading-spinner text-primary m-auto" />}
-        {!isLoading && (
+        {isLoading ? (
+          <span className="w-14 h-14 loading loading-spinner text-primary m-auto" />
+        ) : (
           <div className="flex flex-col">
             <div className="flex flex-col p-8 pb-0 w-full sm:w-[500px] m-auto">
               <input
